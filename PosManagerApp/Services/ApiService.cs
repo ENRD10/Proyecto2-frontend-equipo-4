@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using PosManagerApp.Exceptions;
 
 namespace PosManagerApp.Services
 {
@@ -37,7 +38,7 @@ namespace PosManagerApp.Services
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<TResponse>()
-                   ?? throw new Exception("La API devolvió una respuesta vacía.");
+                   ?? throw new ApiException("La API devolvió una respuesta vacía.");
         }
 
         protected async Task<TResponse> PutAsync<TRequest, TResponse>(
@@ -49,7 +50,7 @@ namespace PosManagerApp.Services
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<TResponse>()
-                   ?? throw new Exception("La API devolvió una respuesta vacía.");
+                   ?? throw new ApiException("La API devolvió una respuesta vacía.");
         }
 
         protected async Task DeleteAsync(string endpoint)
