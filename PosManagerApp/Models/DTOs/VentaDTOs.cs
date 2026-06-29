@@ -43,4 +43,11 @@ namespace PosManagerApp.Models.DTOs
         public decimal PrecioSubtotal { get; set; }
         public decimal PrecioTotal { get; set; }
     }
+
+    public class CreateVentaResponse
+    {
+        public int NumeroOrden { get; set; }
+
+        public string Mensaje { get; set; } = string.Empty;
+    }
 }
