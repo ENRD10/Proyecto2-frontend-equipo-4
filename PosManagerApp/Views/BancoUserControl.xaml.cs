@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PosManagerApp.ViewModels;
 
 namespace PosManagerApp.Views
 {
@@ -18,9 +19,24 @@ namespace PosManagerApp.Views
     /// </summary>
     public partial class BancoUserControl : UserControl
     {
+        private readonly BancoViewModel _viewModel;
+
         public BancoUserControl()
         {
             InitializeComponent();
+
+            _viewModel = new BancoViewModel();
+
+            DataContext = _viewModel;
+
+            Loaded += BancoUserControl_Loaded;
+        }
+
+        private async void BancoUserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= BancoUserControl_Loaded;
+
+            await _viewModel.LoadAsync();
         }
     }
 }

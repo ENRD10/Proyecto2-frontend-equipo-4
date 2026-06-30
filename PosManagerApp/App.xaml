@@ -30,6 +30,8 @@
 
                 <ResourceDictionary Source="Resources/Styles/ScrollViewer.xaml"/>
 
+                <ResourceDictionary Source="Resources/Styles/CheckBox.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
