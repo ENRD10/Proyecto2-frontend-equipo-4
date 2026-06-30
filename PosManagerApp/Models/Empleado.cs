@@ -46,7 +46,32 @@ namespace PosManagerApp.Models
         public string PasswordTemporal { get => passwordTemporal; set => SetProperty(ref passwordTemporal, value); }
         public string NumeroCuentaBancaria { get => numeroCuentaBancaria; set => SetProperty(ref numeroCuentaBancaria, value); }
         public string NombreBancoCuenta { get => nombreBancoCuenta; set => SetProperty(ref nombreBancoCuenta, value); }
-        
+
+        public Empleado Clone()
+        {
+            return new Empleado
+            {
+                Id = Id,
+                Nombre = Nombre,
+                Apellidos = Apellidos,
+                NumeroIdentificacion = NumeroIdentificacion,
+                LoginName = LoginName,
+                Password = Password,
+                PasswordEncriptada = PasswordEncriptada,
+                Direccion = Direccion,
+                Ciudad = Ciudad,
+                Nacionalidad = Nacionalidad,
+                Email = Email,
+                Photo = Photo,
+                Activo = Activo,
+                EstadoCivil = EstadoCivil,
+                TelefonoOficina = TelefonoOficina,
+                TelefonoMovil = TelefonoMovil,
+                PasswordTemporal = PasswordTemporal,
+                NumeroCuentaBancaria = NumeroCuentaBancaria,
+                NombreBancoCuenta = NombreBancoCuenta
+            };
+        }
         public string NombreCompleto => $"{Nombre} {Apellidos}";
         public override string ToString() => NombreCompleto;
     }

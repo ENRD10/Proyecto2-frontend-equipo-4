@@ -31,5 +31,24 @@ namespace PosManagerApp.Models
         public string Telefono { get => telefono; set => SetProperty(ref telefono, value); }
         public string EstadoPais { get => estadoPais; set => SetProperty(ref estadoPais, value); }
         public bool Activo { get => activo; set => SetProperty(ref activo, value); }
+
+        public Banco Clone()
+        {
+            return new Banco
+            {
+                Id = Id,
+                CodigoIdentificador = CodigoIdentificador,
+                Nombre = Nombre,
+                Email = Email,
+                Ciudad = Ciudad,
+                Fax = Fax,
+                Zip = Zip,
+                Pais = Pais,
+                Direccion = Direccion,
+                Telefono = Telefono,
+                EstadoPais = EstadoPais,
+                Activo = Activo
+            };
+        }
     }
 }

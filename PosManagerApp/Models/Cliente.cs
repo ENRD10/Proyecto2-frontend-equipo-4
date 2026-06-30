@@ -39,6 +39,27 @@ namespace PosManagerApp.Models
         public string TelefonoFijo { get => telefonoFijo; set => SetProperty(ref telefonoFijo, value); }
         public string TelefonoMovil { get => telefonoMovil; set => SetProperty(ref telefonoMovil, value); }
 
+        public Cliente Clone()
+        {
+            return new Cliente
+            {
+                Id = Id,
+                Nombre = Nombre,
+                Apellidos = Apellidos,
+                NumeroIdentificacion = NumeroIdentificacion,
+                LoginName = LoginName,
+                Password = Password,
+                PasswordEncriptada = PasswordEncriptada,
+                Direccion = Direccion,
+                Ciudad = Ciudad,
+                Nacionalidad = Nacionalidad,
+                Email = Email,
+                Photo = Photo,
+                Activo = Activo,
+                TelefonoMovil = TelefonoMovil,
+                TelefonoFijo = TelefonoFijo
+            };
+        }
         public string NombreCompleto => $"{Nombre} {Apellidos}";
         public override string ToString() => NombreCompleto;
     }

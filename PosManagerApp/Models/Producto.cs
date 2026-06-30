@@ -77,14 +77,52 @@ namespace PosManagerApp.Models
         public string UnidadVolumen { get => unidadVolumen; set => SetProperty(ref unidadVolumen, value); }
         public List<Categoria> Categorias { get => categorias; set => SetProperty(ref categorias, value); }
 
+        public Producto Clone()
+        {
+            return new Producto
+            {
+                ProductId = ProductId,
+                NombreEtiqueta = NombreEtiqueta,
+                Descripcion = Descripcion,
+                ExistenciaEnStock = ExistenciaEnStock,
+                ExistenciaLimiteParaAlmacenar = ExistenciaLimiteParaAlmacenar,
+                PrecioNeto = PrecioNeto,
+                PrecioMinimo = PrecioMinimo,
+                PrecioMinimoConImpuesto = PrecioMinimoConImpuesto,
+                FechaCreacion = FechaCreacion,
+                PuedeVenderse = PuedeVenderse,
+                PuedeComprarse = PuedeComprarse,
+                ImpuestoValorAgregado = ImpuestoValorAgregado,
+                ImpuestoLocal1 = ImpuestoLocal1,
+                ImpuestoLocal2 = ImpuestoLocal2,
+                TieneImpuesto = TieneImpuesto,
+                CodigoBarra = CodigoBarra,
+                Imagen = Imagen,
+                CodigoContableVentas = CodigoContableVentas,
+                CodigoContableCompras = CodigoContableCompras,
+                Peso = Peso,
+                UnidadPeso = UnidadPeso,
+                Longitud = Longitud,
+                UnidadLongitud = UnidadLongitud,
+                Superficie = Superficie,
+                UnidadSuperficie = UnidadSuperficie,
+                Volumen = Volumen,
+                UnidadVolumen = UnidadVolumen,
+                Categorias = Categorias?.Select(c => c.Clone()).ToList() ?? new List<Categoria>()
+            };
+        }
+
         // Propiedades calculadas
         public decimal PorcentajeImpuesto =>
             TieneImpuesto
                 ? ImpuestoValorAgregado + ImpuestoLocal1 + ImpuestoLocal2
                 : 0m;
+
         public decimal PrecioConImpuesto =>
             PrecioNeto * (1 + (PorcentajeImpuesto / 100));
+
         public bool HayExistencias => ExistenciaEnStock > 0;
+
         public override string ToString() => NombreEtiqueta;
     }
 }
