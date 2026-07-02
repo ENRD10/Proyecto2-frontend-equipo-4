@@ -61,6 +61,7 @@ namespace PosManagerApp.Models
             };
         }
         public string NombreCompleto => $"{Nombre} {Apellidos}";
+        public string DisplayName => $"{NumeroIdentificacion} - {NombreCompleto}";
         public override string ToString() => NombreCompleto;
     }
 }

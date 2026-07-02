@@ -124,5 +124,7 @@ namespace PosManagerApp.Models
         public bool HayExistencias => ExistenciaEnStock > 0;
 
         public override string ToString() => NombreEtiqueta;
+
+        public string DisplayName => $"{CodigoBarra} - {NombreEtiqueta}";
     }
 }
