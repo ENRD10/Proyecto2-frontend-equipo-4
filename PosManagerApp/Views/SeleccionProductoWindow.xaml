@@ -1,0 +1,180 @@
+﻿<Window x:Class="PosManagerApp.Views.SeleccionProductoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Agregar producto"
+        Width="950"
+        Height="600"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="15"/>
+
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+        <!-- BUSCADOR -->
+
+        <StackPanel>
+
+            <TextBlock
+                Text="Buscar producto"
+                Style="{StaticResource LabelText}"/>
+
+            <TextBox
+                Margin="0,5,0,0"
+                Height="38"
+                Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}"
+                ToolTip="Buscar por nombre..."/>
+
+        </StackPanel>
+
+        <!-- CONTENIDO -->
+
+        <Grid Grid.Row="2">
+
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="2.5*"/>
+
+                <ColumnDefinition Width="20"/>
+
+                <ColumnDefinition Width="2*"/>
+
+            </Grid.ColumnDefinitions>
+
+            <!-- PRODUCTOS -->
+
+            <DataGrid Grid.Column="0"
+                      ItemsSource="{Binding Productos}"
+                      SelectedItem="{Binding ProductoSeleccionado}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      MouseDoubleClick="Productos_MouseDoubleClick">
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn
+                        Header="Código"
+                        Binding="{Binding CodigoBarra}"
+                        Width="120"/>
+
+                    <DataGridTextColumn
+                        Header="Nombre"
+                        Binding="{Binding NombreEtiqueta}"
+                        Width="*"/>
+
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+            <!-- PANEL DERECHO -->
+
+            <Border Grid.Column="2"
+                    Background="{StaticResource CardBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="18">
+
+                <DockPanel>
+
+                    <!-- BOTONES -->
+
+                    <StackPanel DockPanel.Dock="Bottom"
+                                Margin="0,20,0,0">
+
+                        <Button
+                            Height="42"
+                            Margin="0,0,0,10"
+                            Style="{StaticResource SuccessButton}"
+                            Content="Agregar"
+                            Command="{Binding AceptarCommand}"/>
+
+                        <Button
+                            Height="42"
+                            Style="{StaticResource SecondaryButton}"
+                            Content="Cancelar"
+                            Command="{Binding CancelarCommand}"/>
+
+                    </StackPanel>
+
+                    <!-- RESUMEN -->
+
+                    <StackPanel>
+
+                        <TextBlock
+                            Text="Información"
+                            Style="{StaticResource SubtitleText}"
+                            Margin="0,0,0,20"/>
+
+                        <TextBlock
+                            Text="Código"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Margin="0,4,0,12"
+                            Text="{Binding ProductoSeleccionado.CodigoBarra}"/>
+
+                        <TextBlock
+                            Text="Nombre"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Margin="0,4,0,12"
+                            Text="{Binding ProductoSeleccionado.NombreEtiqueta}"
+                            TextWrapping="Wrap"/>
+
+                        <TextBlock
+                            Text="Precio"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Margin="0,4,0,12"
+                            Text="{Binding ProductoSeleccionado.PrecioNeto,StringFormat=C}"/>
+
+                        <TextBlock
+                            Text="IVA"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Margin="0,4,0,12"
+                            Text="{Binding ProductoSeleccionado.PorcentajeImpuesto,StringFormat={}{0}%}"/>
+
+                        <TextBlock
+                            Text="Existencias"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Margin="0,4,0,20"
+                            Text="{Binding ProductoSeleccionado.ExistenciaEnStock}"/>
+
+                        <TextBlock
+                            Text="Cantidad"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBox
+                            Width="90"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left"
+                            Text="{Binding Cantidad}"/>
+
+                    </StackPanel>
+
+                </DockPanel>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+
+</Window>

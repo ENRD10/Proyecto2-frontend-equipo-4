@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using PosManagerApp.ViewModels;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -18,9 +19,24 @@ namespace PosManagerApp.Views
     /// </summary>
     public partial class VentaUserControl : UserControl
     {
+        private readonly VentaViewModel _viewModel;
+
         public VentaUserControl()
         {
             InitializeComponent();
+
+            _viewModel = new VentaViewModel();
+
+            DataContext = _viewModel;
+
+            Loaded += VentaUserControl_Loaded;
+        }
+
+        private async void VentaUserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= VentaUserControl_Loaded;
+
+            await _viewModel.LoadAsync();
         }
     }
 }

@@ -1,12 +1,264 @@
 ﻿<UserControl x:Class="PosManagerApp.Views.VentaUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PosManagerApp.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="25">
+
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition Width="3*"/>
+
+            <ColumnDefinition Width="20"/>
+
+            <ColumnDefinition Width="1*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <!-- PANEL IZQUIERDO -->
+
+        <Grid Grid.Column="0">
+
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+
+            </Grid.RowDefinitions>
+
+            <!-- Datos generales -->
+
+            <StackPanel>
+
+                <TextBlock Text="Cliente"
+                           Margin="0,0,0,0"
+                           Style="{StaticResource LabelText}"/>
+                <ComboBox
+                    Margin="0,5,0,0"
+                    IsEditable="True"
+                    StaysOpenOnEdit="True"
+                    ItemsSource="{Binding ClientesView}"
+                    Text="{Binding BuscarCliente, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding ClienteSeleccionado}">
+                    
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
+
+                <TextBlock Text="Empleado"
+                           Margin="0,15,0,0"
+                           Style="{StaticResource LabelText}"/>
+                <ComboBox
+                    Margin="0,5,0,0"
+                    IsEditable="True"
+                    StaysOpenOnEdit="True"
+                    ItemsSource="{Binding EmpleadosView}"
+                    Text="{Binding BuscarEmpleado, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding EmpleadoSeleccionado}">
+                    
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
+
+                <TextBlock Text="Fecha"
+                           Margin="0,15,0,0"
+                           Style="{StaticResource LabelText}"/>
+                <DatePicker
+                    Margin="0,5,0,0"
+                    SelectedDate="{Binding FechaVenta}"/>
+
+            </StackPanel>
+
+            <!-- DETALLE -->
+
+            <TextBlock Grid.Row="2"
+                       Text="Detalles de la órden"
+                       Margin="0,0,0,0"
+                       Style="{StaticResource TitleLabel}"/>
+
+
+            <DataGrid Grid.Row="3"
+                      Margin="0,15,0,0"
+                      ItemsSource="{Binding Detalles}"
+                      SelectedItem="{Binding DetalleSeleccionado}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False">
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn
+                    Header="Código"
+                    Binding="{Binding CodigoProducto}"
+                    Width="100"
+                    IsReadOnly="True"/>
+
+                    <DataGridTextColumn
+                    Header="Nombre"
+                    Binding="{Binding NombreProducto}"
+                    Width="*"
+                    IsReadOnly="True"/>
+
+                    <DataGridTextColumn
+                    Header="Precio"
+                    Binding="{Binding PrecioUnitario,StringFormat=C,ValidatesOnExceptions=True,NotifyOnValidationError=True}"
+                    Width="110"
+                    IsReadOnly="True"/>
+
+                    <!-- Editable -->
+
+                    <DataGridTextColumn
+                    Header="Cantidad"
+                    Binding="{Binding Cantidad, UpdateSourceTrigger=PropertyChanged}"
+                    Width="90"/>
+
+                    <DataGridTextColumn
+                    Header="Subtotal"
+                    Binding="{Binding PrecioSubtotal,StringFormat=C}"
+                    Width="120"
+                    IsReadOnly="True"/>
+
+                    <DataGridTextColumn
+                    Header="Impuesto"
+                    Binding="{Binding MontoImpuesto,StringFormat=C}"
+                    Width="110"
+                    IsReadOnly="True"/>
+
+                    <DataGridTextColumn
+                    Header="Total"
+                    Binding="{Binding PrecioTotal,StringFormat=C}"
+                    Width="120"
+                    IsReadOnly="True"/>
+
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+
+            <!-- Botones -->
+
+            <StackPanel Grid.Row="5"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Left">
+
+                <Button
+                    Width="170"
+                    Margin="0,0,10,0"
+                    Content="Remover Producto"
+                    Style="{StaticResource SecondaryButton}"
+                    Command="{Binding EliminarProductoCommand}"/>
+
+                <Button
+                    Width="170"
+                    Content="Agregar Producto"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding AgregarProductoCommand}"/>
+
+            </StackPanel>
+
+        </Grid>
+
+        <!-- PANEL DERECHO -->
+
+        <Border Grid.Column="2"
+                Background="{StaticResource CardBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="20">
+
+            <DockPanel>
+
+                <Button DockPanel.Dock="Bottom"
+                        Height="48"
+                        Margin="0,25,0,0"
+                        Style="{StaticResource SuccessButton}"
+                        Content="Registrar Venta"
+                        Command="{Binding RegistrarVentaCommand}"/>
+
+                <StackPanel>
+
+                    <TextBlock
+                        Text="Resumen"
+                        Style="{StaticResource TitleLabel}"
+                        Margin="0,0,0,20"/>
+                    <Separator Margin="0,0,0,20"/>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="Auto"/>
+
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition/>
+
+                            <ColumnDefinition Width="Auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Text="Subtotal"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Style="{StaticResource SubLabel}"
+                            Text="{Binding Subtotal,StringFormat=C}"/>
+
+                        <Separator Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,15"/>
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Text="Impuestos"
+                            Style="{StaticResource LabelText}"/>
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource SubLabel}"
+                            Text="{Binding TotalImpuestos,StringFormat=C}"/>
+
+                        <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,15"/>
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Text="Total"
+                            Style="{StaticResource SubLabel}"
+                            FontWeight="Bold"/>
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            FontWeight="Bold"
+                            FontSize="18"
+                            Style="{StaticResource TitleLabel}"
+                            Text="{Binding TotalVenta,StringFormat=C}"/>
+
+                    </Grid>
+
+                </StackPanel>
+
+            </DockPanel>
+
+        </Border>
+
     </Grid>
+
 </UserControl>
