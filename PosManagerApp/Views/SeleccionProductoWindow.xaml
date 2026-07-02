@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Agregar producto"
         Width="950"
-        MinHeight="680"
+        MinHeight="600"
         WindowStartupLocation="CenterOwner"
         Background="{StaticResource BackgroundBrush}">
 
@@ -82,7 +82,7 @@
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1"
                     CornerRadius="10"
-                    Padding="10">
+                    Padding="15">
 
                 <DockPanel>
 
@@ -106,68 +106,45 @@
                     </StackPanel>
 
                     <!-- RESUMEN -->
-
                     <StackPanel>
-
                         <TextBlock
                             Text="Información"
                             Style="{StaticResource SubtitleText}"
                             Margin="0,0,0,20"/>
 
-                        <TextBlock
-                            Text="Código"
-                            Style="{StaticResource LabelText}"/>
+                        <!-- CÓDIGO -->
+                        <DockPanel Margin="0,0,0,15">
+                            <TextBlock Text="Código" Style="{StaticResource LabelText}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ProductoSeleccionado.CodigoBarra}" Style="{StaticResource SubLabel}" TextAlignment="Right" VerticalAlignment="Center"/>
+                        </DockPanel>
 
-                        <TextBlock
-                            Margin="10,4,0,12"
-                            Style="{StaticResource SubLabel}"
-                            Text="{Binding ProductoSeleccionado.CodigoBarra}"/>
+                        <!-- NOMBRE -->
+                        <DockPanel Margin="0,0,0,15">
+                            <TextBlock Text="Nombre" Style="{StaticResource LabelText}" DockPanel.Dock="Left" VerticalAlignment="Top"/>
+                            <TextBlock Text="{Binding ProductoSeleccionado.NombreEtiqueta}" Style="{StaticResource SubLabel}" TextAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                        </DockPanel>
 
-                        <TextBlock
-                            Text="Nombre"
-                            Style="{StaticResource LabelText}"/>
+                        <!-- PRECIO -->
+                        <DockPanel Margin="0,0,0,15">
+                            <TextBlock Text="Precio" Style="{StaticResource LabelText}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ProductoSeleccionado.PrecioNeto, StringFormat=C}" Style="{StaticResource SubLabel}" TextAlignment="Right" VerticalAlignment="Center"/>
+                        </DockPanel>
 
-                        <TextBlock
-                            Margin="10,4,0,12"
-                            Style="{StaticResource SubLabel}"
-                            Text="{Binding ProductoSeleccionado.NombreEtiqueta}"
-                            TextWrapping="Wrap"/>
+                        <!-- IVA -->
+                        <DockPanel Margin="0,0,0,15">
+                            <TextBlock Text="IVA" Style="{StaticResource LabelText}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ProductoSeleccionado.PorcentajeImpuesto, StringFormat={}{0}%}" Style="{StaticResource SubLabel}" TextAlignment="Right" VerticalAlignment="Center"/>
+                        </DockPanel>
 
-                        <TextBlock
-                            Text="Precio"
-                            Style="{StaticResource LabelText}"/>
+                        <!-- EXISTENCIAS -->
+                        <DockPanel Margin="0,0,0, 20">
+                            <TextBlock Text="Existencias" Style="{StaticResource LabelText}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ProductoSeleccionado.ExistenciaEnStock}" Style="{StaticResource SubLabel}" TextAlignment="Right" VerticalAlignment="Center"/>
+                        </DockPanel>
 
-                        <TextBlock
-                            Margin="10,4,0,12"
-                            Style="{StaticResource SubLabel}"
-                            Text="{Binding ProductoSeleccionado.PrecioNeto,StringFormat=C}"/>
-
-                        <TextBlock
-                            Text="IVA"
-                            Style="{StaticResource LabelText}"/>
-
-                        <TextBlock
-                            Margin="10,4,0,12"
-                            Style="{StaticResource SubLabel}"
-                            Text="{Binding ProductoSeleccionado.PorcentajeImpuesto,StringFormat={}{0}%}"/>
-
-                        <TextBlock
-                            Text="Existencias"
-                            Style="{StaticResource LabelText}"/>
-
-                        <TextBlock
-                            Margin="10,4,0,20"
-                            Style="{StaticResource SubLabel}"
-                            Text="{Binding ProductoSeleccionado.ExistenciaEnStock}"/>
-
-                        <TextBlock
-                            Text="Cantidad"
-                            Style="{StaticResource LabelText}"/>
-
-                        <TextBox
-                            Margin="0,5,0,0"
-                            Text="{Binding Cantidad}"/>
-
+                        <!-- CANTIDAD A AGREGAR -->
+                        <TextBlock Text="Cantidad" Style="{StaticResource LabelText}" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding Cantidad}" Height="40" VerticalContentAlignment="Center"/>
                     </StackPanel>
 
                 </DockPanel>
