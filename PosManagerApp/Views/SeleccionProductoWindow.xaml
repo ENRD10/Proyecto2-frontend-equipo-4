@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Agregar producto"
         Width="950"
-        Height="600"
+        MinHeight="680"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
         Background="{StaticResource BackgroundBrush}">
 
     <Grid Margin="20">
@@ -16,13 +15,13 @@
 
             <RowDefinition Height="15"/>
 
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="19*"/>
 
         </Grid.RowDefinitions>
 
         <!-- BUSCADOR -->
 
-        <StackPanel>
+        <StackPanel Margin="0,0,0,15" Grid.ColumnSpan="2">
 
             <TextBlock
                 Text="Buscar producto"
@@ -38,7 +37,7 @@
 
         <!-- CONTENIDO -->
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Grid.RowSpan="2">
 
             <Grid.ColumnDefinitions>
 
@@ -83,24 +82,23 @@
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1"
                     CornerRadius="10"
-                    Padding="18">
+                    Padding="10">
 
                 <DockPanel>
 
                     <!-- BOTONES -->
 
-                    <StackPanel DockPanel.Dock="Bottom"
-                                Margin="0,20,0,0">
+                    <StackPanel DockPanel.Dock="Bottom">
 
                         <Button
-                            Height="42"
+                            Height="40"
                             Margin="0,0,0,10"
                             Style="{StaticResource SuccessButton}"
                             Content="Agregar"
                             Command="{Binding AceptarCommand}"/>
 
                         <Button
-                            Height="42"
+                            Height="40"
                             Style="{StaticResource SecondaryButton}"
                             Content="Cancelar"
                             Command="{Binding CancelarCommand}"/>
@@ -121,7 +119,8 @@
                             Style="{StaticResource LabelText}"/>
 
                         <TextBlock
-                            Margin="0,4,0,12"
+                            Margin="10,4,0,12"
+                            Style="{StaticResource SubLabel}"
                             Text="{Binding ProductoSeleccionado.CodigoBarra}"/>
 
                         <TextBlock
@@ -129,7 +128,8 @@
                             Style="{StaticResource LabelText}"/>
 
                         <TextBlock
-                            Margin="0,4,0,12"
+                            Margin="10,4,0,12"
+                            Style="{StaticResource SubLabel}"
                             Text="{Binding ProductoSeleccionado.NombreEtiqueta}"
                             TextWrapping="Wrap"/>
 
@@ -138,7 +138,8 @@
                             Style="{StaticResource LabelText}"/>
 
                         <TextBlock
-                            Margin="0,4,0,12"
+                            Margin="10,4,0,12"
+                            Style="{StaticResource SubLabel}"
                             Text="{Binding ProductoSeleccionado.PrecioNeto,StringFormat=C}"/>
 
                         <TextBlock
@@ -146,7 +147,8 @@
                             Style="{StaticResource LabelText}"/>
 
                         <TextBlock
-                            Margin="0,4,0,12"
+                            Margin="10,4,0,12"
+                            Style="{StaticResource SubLabel}"
                             Text="{Binding ProductoSeleccionado.PorcentajeImpuesto,StringFormat={}{0}%}"/>
 
                         <TextBlock
@@ -154,7 +156,8 @@
                             Style="{StaticResource LabelText}"/>
 
                         <TextBlock
-                            Margin="0,4,0,20"
+                            Margin="10,4,0,20"
+                            Style="{StaticResource SubLabel}"
                             Text="{Binding ProductoSeleccionado.ExistenciaEnStock}"/>
 
                         <TextBlock
@@ -162,9 +165,7 @@
                             Style="{StaticResource LabelText}"/>
 
                         <TextBox
-                            Width="90"
                             Margin="0,5,0,0"
-                            HorizontalAlignment="Left"
                             Text="{Binding Cantidad}"/>
 
                     </StackPanel>
