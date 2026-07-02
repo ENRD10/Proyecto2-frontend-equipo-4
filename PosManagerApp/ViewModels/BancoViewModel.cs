@@ -115,7 +115,7 @@ namespace PosManagerApp.ViewModels
 
                 ActualizarColeccion(_allBancos);
 
-                BancoActual = new Banco();
+                NewBanco();
             }
             catch (ApiException ex)
             {
