@@ -1,13 +1,15 @@
-﻿using PosManagerApp.Exceptions;
+﻿using PosManagerApp.Commands;
+using PosManagerApp.Exceptions;
 using PosManagerApp.Models;
 using PosManagerApp.Services;
-using PosManagerApp.Commands;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace PosManagerApp.ViewModels
 {
-    public class BancoViewModel : ObservableObject
+    public class BancoViewModel : ViewModel
     {
         private readonly BancoService _service = new();
 
@@ -67,6 +69,14 @@ namespace PosManagerApp.ViewModels
                 ? "Editando banco"
                 : "Nuevo banco";
 
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            private set => SetProperty(ref _isBusy, value);
+        }
+
         #endregion
 
         #region Commands
@@ -77,6 +87,8 @@ namespace PosManagerApp.ViewModels
 
         public RelayCommand NewCommand { get; }
 
+        public AsyncRelayCommand RefreshCommand { get; }
+
         #endregion
 
         public BancoViewModel()
@@ -86,54 +98,74 @@ namespace PosManagerApp.ViewModels
             DeleteCommand = new AsyncRelayCommand(DeleteAsync);
 
             NewCommand = new RelayCommand(NewBanco);
+
+            RefreshCommand = new AsyncRelayCommand(LoadAsync);
         }
 
         public async Task LoadAsync()
         {
-            var bancos = await _service.GetAll();
+            if (IsBusy) return;
+            IsBusy = true;
+            try
+            {
+                var bancos = await _service.GetAll();
 
-            _allBancos.Clear();
-            _allBancos.AddRange(bancos);
+                _allBancos.Clear();
+                _allBancos.AddRange(bancos);
 
-            ActualizarColeccion(_allBancos);
+                ActualizarColeccion(_allBancos);
 
-            BancoActual = new Banco();
+                BancoActual = new Banco();
+            }
+            catch (ApiException ex)
+            {
+                HandleApiException(ex, "Error al cargar bancos");
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex, "Error al cargar bancos");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task SaveAsync()
         {
+            if (IsBusy) return;
+            IsBusy = true;
             try
             {
-                if (BancoActual.Id == 0)
-                {
-                    await _service.Create(BancoActual);
-                }
+                var isNew = BancoActual.Id == 0;
+                if (isNew)
+                    BancoActual = await _service.Create(BancoActual);
                 else
-                {
-                    await _service.Update(BancoActual);
-                }
+                    BancoActual = await _service.Update(BancoActual);
 
+                var action = isNew ? "creado" : "actualizado";
+                MostrarOperacionExitosa(action);
+
+                IsBusy = false;
                 await LoadAsync();
-
-                MessageBox.Show(
-                    "La información fue guardada correctamente.",
-                    "Banco",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
             }
             catch (ApiException ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                HandleApiException(ex, "Error al guardar");
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex, "Error al guardar");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
         private async Task DeleteAsync()
         {
-            if (SelectedBanco == null)
+            if (SelectedBanco == null || IsBusy)
                 return;
 
             var result = MessageBox.Show(
@@ -145,19 +177,27 @@ namespace PosManagerApp.ViewModels
             if (result != MessageBoxResult.Yes)
                 return;
 
+            IsBusy = true;
             try
             {
                 await _service.Delete(SelectedBanco.Id);
 
+                MostrarOperacionExitosa("eliminado");
+
+                IsBusy = false;
                 await LoadAsync();
             }
             catch (ApiException ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                HandleApiException(ex, "Error al eliminar");
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex, "Error al eliminar");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -167,7 +207,8 @@ namespace PosManagerApp.ViewModels
 
             BancoActual = new Banco()
             {
-                Activo = true
+                Activo = true,
+                Id = 0
             };
         }
 
@@ -179,17 +220,17 @@ namespace PosManagerApp.ViewModels
                 return;
             }
 
-            var texto = SearchText.ToLower();
+            var texto = SearchText.ToLowerInvariant();
 
             var filtrados = _allBancos.Where(b =>
 
                 (!string.IsNullOrWhiteSpace(b.Nombre) &&
-                 b.Nombre.ToLower().Contains(texto))
+                 b.Nombre.ToLowerInvariant().Contains(texto))
 
                 ||
 
                 (!string.IsNullOrWhiteSpace(b.CodigoIdentificador) &&
-                 b.CodigoIdentificador.ToLower().Contains(texto))
+                 b.CodigoIdentificador.ToLowerInvariant().Contains(texto))
 
             );
 
@@ -204,6 +245,15 @@ namespace PosManagerApp.ViewModels
             {
                 Bancos.Add(banco);
             }
+        }
+
+        private void MostrarOperacionExitosa(string action)
+        {
+            MessageBox.Show(
+                $"El banco ID:{BancoActual.Id} ha sido {action} correctamente.",
+                "Banco - Operación exitosa",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
     }
 }
